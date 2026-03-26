@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_PLUGIN_ROOT": "C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents",
+    "ECC_PROFILE": "standard"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx block-no-verify@1.1.2"
+          }
+        ],
+        "description": "Bloquea --no-verify en git para proteger pre-commit, commit-msg y pre-push hooks"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"pre:bash:tmux-reminder\" \"scripts/hooks/pre-bash-tmux-reminder.js\" \"strict\""
+          }
+        ],
+        "description": "Recuerda usar tmux para comandos de larga duración"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"pre:bash:git-push-reminder\" \"scripts/hooks/pre-bash-git-push-reminder.js\" \"strict\""
+          }
+        ],
+        "description": "Avisa antes de git push para revisar cambios"
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"pre:write:doc-file-warning\" \"scripts/hooks/doc-file-warning.js\" \"standard,strict\""
+          }
+        ],
+        "description": "Avisa sobre archivos de documentación no estándar"
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"pre:edit-write:suggest-compact\" \"scripts/hooks/suggest-compact.js\" \"standard,strict\""
+          }
+        ],
+        "description": "Sugiere compactación manual del contexto en momentos lógicos"
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"pre:config-protection\" \"scripts/hooks/config-protection.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Bloquea modificaciones a archivos de config de linters/formatters. Redirige al agente a arreglar el código en vez de debilitar las configs"
+      },
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"pre:governance-capture\" \"scripts/hooks/governance-capture.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Captura eventos de gobernanza (secrets, policy violations). Activar con ECC_GOVERNANCE_CAPTURE=1"
+      },
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"pre:insaits-security\" \"scripts/hooks/insaits-security-wrapper.js\" \"standard,strict\"",
+            "timeout": 15
+          }
+        ],
+        "description": "Monitor de seguridad IA InsAIts para flujos Bash/Edit/Write. Activar con ECC_ENABLE_INSAITS=1. Requiere: pip install insa-its"
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"pre:compact\" \"scripts/hooks/pre-compact.js\" \"standard,strict\""
+          }
+        ],
+        "description": "Guarda el estado antes de la compactación del contexto"
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"session:start\" \"scripts/hooks/session-start.js\" \"minimal,standard,strict\""
+          }
+        ],
+        "description": "Carga contexto previo y detecta el package manager al inicio de sesión"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"post:bash:pr-created\" \"scripts/hooks/post-bash-pr-created.js\" \"standard,strict\""
+          }
+        ],
+        "description": "Registra la URL del PR y proporciona el comando de revisión tras la creación"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"post:bash:build-complete\" \"scripts/hooks/post-bash-build-complete.js\" \"standard,strict\"",
+            "async": true,
+            "timeout": 30
+          }
+        ],
+        "description": "Análisis de build en background tras completar (no bloquea)"
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"post:quality-gate\" \"scripts/hooks/quality-gate.js\" \"standard,strict\"",
+            "async": true,
+            "timeout": 30
+          }
+        ],
+        "description": "Ejecuta quality gate checks tras editar archivos"
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"post:edit:format\" \"scripts/hooks/post-edit-format.js\" \"strict\""
+          }
+        ],
+        "description": "Auto-formatea archivos JS/TS tras editar (detecta Biome o Prettier automáticamente)"
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"post:edit:typecheck\" \"scripts/hooks/post-edit-typecheck.js\" \"strict\""
+          }
+        ],
+        "description": "TypeScript check tras editar archivos .ts/.tsx"
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"post:edit:console-warn\" \"scripts/hooks/post-edit-console-warn.js\" \"standard,strict\""
+          }
+        ],
+        "description": "Avisa sobre console.log statements tras editar"
+      },
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"post:governance-capture\" \"scripts/hooks/governance-capture.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Captura eventos de gobernanza de los outputs de herramientas. Activar con ECC_GOVERNANCE_CAPTURE=1"
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"post:mcp-health-check\" \"scripts/hooks/mcp-health-check.js\" \"standard,strict\""
+          }
+        ],
+        "description": "Rastrea llamadas MCP fallidas, marca servidores no saludables e intenta reconexión"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"stop:check-console-log\" \"scripts/hooks/check-console-log.js\" \"standard,strict\""
+          }
+        ],
+        "description": "Comprueba console.log en archivos modificados tras cada respuesta"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"stop:session-end\" \"scripts/hooks/session-end.js\" \"minimal,standard,strict\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Persiste el estado de sesión tras cada respuesta"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"stop:evaluate-session\" \"scripts/hooks/evaluate-session.js\" \"minimal,standard,strict\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Evalúa la sesión para extraer patrones reutilizables"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"stop:cost-tracker\" \"scripts/hooks/cost-tracker.js\" \"minimal,standard,strict\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Rastrea métricas de tokens y costes por sesión"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"stop:desktop-notify\" \"scripts/hooks/desktop-notify.js\" \"standard,strict\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Notificación de escritorio cuando Claude responde (requiere configuración de notificaciones del SO)"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/Juanjopiñero/Desktop/Claude_code/claude_universal_agents/scripts/hooks/run-with-flags.js\" \"session:end:marker\" \"scripts/hooks/session-end-marker.js\" \"minimal,standard,strict\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Marcador de fin de ciclo de vida de sesión (no bloquea)"
+      }
+    ]
+  }
+}
