@@ -1,6 +1,6 @@
 # Everything Claude Code (ECC) — Agent Instructions
 
-This is a **production-ready AI coding plugin** providing 28 specialized agents, 125 skills, 60 commands, and automated hook workflows for software development.
+This is a **production-ready AI coding plugin** providing 45 specialized agents, 135 skills, 72 commands, and automated hook workflows for software development.
 
 **Version:** 1.9.0
 
@@ -43,6 +43,18 @@ This is a **production-ready AI coding plugin** providing 28 specialized agents,
 | rust-build-resolver | Rust build errors | Rust build failures |
 | pytorch-build-resolver | PyTorch runtime/CUDA/training errors | PyTorch build/training failures |
 | typescript-reviewer | TypeScript/JavaScript code review | TypeScript/JavaScript projects |
+| arquitecto-sistemas | Microservices, APIs, DDD architecture | System design, service decomposition |
+| vue-expert | Vue 3, Composition API, Pinia, Nuxt 3 | Vue.js projects |
+| angular-expert | Angular 17+, signals, standalone components | Angular projects |
+| laravel-expert | Laravel 11+, Eloquent, Livewire | Laravel projects |
+| ruby-expert | Ruby, Rails 7+, Hotwire, Active Record | Ruby/Rails projects |
+| flutter-expert | Flutter/Dart, Riverpod, Bloc, platform channels | Flutter apps |
+| ionic-expert | Ionic, Capacitor, hybrid apps | Ionic/Capacitor projects |
+| kubernetes-expert | K8s, Helm, pod security, networking | Kubernetes infrastructure |
+| terraform-expert | IaC, modules, state management | Infrastructure-as-code |
+| mongodb-expert | MongoDB schema, aggregation, indexing | MongoDB projects |
+| redis-expert | Caching, pub/sub, streams, data structures | Redis usage |
+| elasticsearch-expert | Mappings, queries, aggregations, clusters | Elasticsearch/OpenSearch |
 
 ## Agent Orchestration
 
@@ -141,13 +153,15 @@ Troubleshoot failures: check test isolation → verify mocks → fix implementat
 ## Project Structure
 
 ```
-agents/          — 28 specialized subagents
-skills/          — 125 workflow skills and domain knowledge
-commands/        — 60 slash commands
+agents/          — 33 base subagents
+.claude/agents/  — 12 extended expert agents (45 total)
+skills/          — 125 base workflow skills and domain knowledge
+.claude/skills/  — 10 extended skills (135 total)
+commands/        — 72 slash commands
 hooks/           — Trigger-based automations
 rules/           — Always-follow guidelines (common + per-language)
 scripts/         — Cross-platform Node.js utilities
-mcp-configs/     — 14 MCP server configurations
+mcp-configs/     — 24 MCP server configurations
 tests/           — Test suite
 ```
 

@@ -2,6 +2,32 @@
 
 This file provides complete guidance to Claude Code when working with this repository or any project using this plugin.
 
+## Role
+
+This is a **universal development superagent** — a complete AI-powered development team that auto-detects your stack and activates the right experts for every task. It covers the full lifecycle: planning, implementation, review, testing, deployment, and learning.
+
+## Workflows
+
+### New Project
+```
+/new-project → /plan → implement (TDD) → /code-review → /deploy
+```
+
+### Existing Project
+```
+/onboard → read PROJECT-CONTEXT.md → /plan → implement → /code-review → /test → /deploy → /learn
+```
+
+### Bug Fix
+```
+/fix "error description" → diagnose → write regression test → fix → /code-review
+```
+
+### Optimization
+```
+/optimize → measure baseline → apply changes → verify improvement → /code-review
+```
+
 ## Auto-Detection: What to Do at Session Start
 
 At the beginning of every session, scan the project directory and activate the appropriate agents based on detected files:
@@ -9,30 +35,40 @@ At the beginning of every session, scan the project directory and activate the a
 | If you find... | Activate |
 |---|---|
 | `*.php`, `composer.json` | `php-reviewer`, `security-reviewer` |
-| `artisan`, `laravel/framework` | `php-reviewer`, `database-reviewer` |
+| `artisan`, `laravel/framework` | `laravel-expert`, `database-reviewer` |
 | `*.tsx`, `*.jsx`, React in package.json | `react-reviewer`, `typescript-reviewer` |
 | Next.js in package.json | `react-reviewer`, `typescript-reviewer` |
+| Vue in package.json | `vue-expert`, `typescript-reviewer` |
+| Angular in package.json | `angular-expert`, `typescript-reviewer` |
 | Express/Fastify/NestJS in package.json | `nodejs-reviewer`, `typescript-reviewer` |
 | `*.py`, `requirements.txt` | `python-reviewer`, `security-reviewer` |
 | `django` or `fastapi` in requirements | `python-reviewer`, `database-reviewer` |
+| `Gemfile`, `*.rb` | `ruby-expert`, `security-reviewer` |
 | `go.mod` | `go-reviewer`, `go-build-resolver` |
 | `Cargo.toml` | `rust-reviewer`, `rust-build-resolver` |
 | `pom.xml`, `build.gradle` | `java-reviewer`, `java-build-resolver` |
 | `*.kt`, `build.gradle.kts` | `kotlin-reviewer`, `kotlin-build-resolver` |
+| `pubspec.yaml`, Flutter | `flutter-expert` |
+| `ionic.config.json`, Capacitor | `ionic-expert` |
 | `Dockerfile`, `.github/workflows/` | `devops-agent` |
+| `*.tf`, Terraform/OpenTofu | `terraform-expert` |
+| Kubernetes manifests, Helm | `kubernetes-expert` |
 | `prisma/`, `*.sql migrations` | `database-reviewer` |
+| `mongosh`, `mongoose` in package.json | `mongodb-expert` |
+| Redis client in dependencies | `redis-expert` |
 | Unknown/new project | `onboarding-agent` (run `/onboard` first) |
 
 If the stack is unclear, **always run `/onboard` first** before doing any other work.
 
 ---
 
-## Agents Directory (33 total)
+## Agents Directory (45 total)
 
 ### Planning & Architecture
 | Agent | When to Use |
 |---|---|
 | `architect` | System design, major architectural decisions, scalability planning |
+| `arquitecto-sistemas` | Microservices, monoliths, APIs, DDD, service decomposition |
 | `planner` | Before implementing any feature with 3+ steps — creates detailed plans |
 | `onboarding-agent` | First time in any new/unfamiliar codebase — auto-detects stack |
 
@@ -40,19 +76,32 @@ If the stack is unclear, **always run `/onboard` first** before doing any other 
 | Agent | Language/Framework |
 |---|---|
 | `react-reviewer` | React 18+, Next.js, hooks, a11y, performance |
+| `vue-expert` | Vue 3, Composition API, Pinia, Nuxt 3 |
+| `angular-expert` | Angular 17+, signals, standalone components, RxJS |
 | `nodejs-reviewer` | Node.js backends, Express, Fastify, NestJS, REST APIs |
 | `typescript-reviewer` | TypeScript/JavaScript (generic), type safety |
 | `python-reviewer` | Python 3+, Django, FastAPI, Flask |
 | `php-reviewer` | PHP 8+, Laravel, Composer |
+| `laravel-expert` | Laravel 11+, Eloquent, Livewire, Sanctum |
+| `ruby-expert` | Ruby, Rails 7+, Hotwire, Active Record |
 | `go-reviewer` | Go, idiomatic patterns, concurrency |
 | `rust-reviewer` | Rust, ownership, lifetimes, unsafe |
 | `java-reviewer` | Java, Spring Boot, JPA |
 | `kotlin-reviewer` | Kotlin, Android, KMP, Compose |
 | `cpp-reviewer` | C++, memory safety, modern C++ |
 | `flutter-reviewer` | Flutter, Dart, widget best practices |
+| `flutter-expert` | Flutter advanced: Riverpod, Bloc, platform channels |
+| `ionic-expert` | Ionic, Capacitor, hybrid cross-platform apps |
 | `code-reviewer` | General review when language is mixed or unclear |
 | `security-reviewer` | Security audit for ANY language — OWASP, secrets, injection |
+
+### Database
+| Agent | When to Use |
+|---|---|
 | `database-reviewer` | PostgreSQL, Supabase, query optimization |
+| `mongodb-expert` | MongoDB schema design, aggregation, indexing |
+| `redis-expert` | Redis caching, pub/sub, streams, data structures |
+| `elasticsearch-expert` | Elasticsearch/OpenSearch, mappings, queries, aggregations |
 
 ### Build Error Resolution
 | Agent | When to Use |
@@ -75,6 +124,8 @@ If the stack is unclear, **always run `/onboard` first** before doing any other 
 | Agent | When to Use |
 |---|---|
 | `devops-agent` | Docker, GitHub Actions, CI/CD, deployments |
+| `kubernetes-expert` | K8s manifests, Helm charts, cluster management |
+| `terraform-expert` | Infrastructure-as-code, multi-cloud provisioning |
 
 ### Documentation & Knowledge
 | Agent | When to Use |
@@ -110,16 +161,20 @@ Follow this workflow for ALL features:
 
 ---
 
-## Slash Commands Reference (68 total)
+## Slash Commands Reference (72 total)
 
 ### Essential Daily Commands
 ```
 /plan           → Create implementation plan (ALWAYS before complex work)
 /code-review    → Full security + quality review of changes
+/fix            → Diagnose bugs with root cause analysis and regression test
+/improve        → Analyze and improve code quality and performance
+/test           → Run test suite and generate missing tests
 /tdd            → Test-driven development workflow
 /e2e            → Generate and run E2E tests
 /build-fix      → Fix build/compilation errors
 /docs           → Look up current library documentation
+/optimize       → Profile and optimize performance
 ```
 
 ### New Commands (added by this config)
@@ -128,6 +183,8 @@ Follow this workflow for ALL features:
 /new-project    → Create a new project from scratch with full tooling
 /deploy         → Deploy the project to configured target
 /audit          → Full security + quality + dependency audit
+/db-setup       → Initialize database schema, migrations, and seed data
+/security-scan  → Full OWASP + secrets + dependency vulnerability scan
 ```
 
 ### Language-Specific Build & Review
@@ -139,7 +196,8 @@ Follow this workflow for ALL features:
 /rust-build     → Fix Rust/Cargo errors
 /rust-review    → Rust code review
 /rust-test      → Run Rust tests
-/java-review    → Java/Spring Boot review (use java-reviewer agent)
+/java-review    → Java/Spring Boot review
+/java-build     → Fix Java/Maven/Gradle build errors
 /kotlin-build   → Fix Kotlin/Gradle errors
 /kotlin-review  → Kotlin code review
 /cpp-build      → Fix C++ build errors
@@ -235,16 +293,18 @@ These rules apply to ALL languages and frameworks:
 This plugin is organized as:
 
 ```
-agents/          # 33 specialized subagents (Markdown + YAML frontmatter)
-commands/        # 68 slash commands (Markdown with description frontmatter)
+agents/          # 33 base subagents (Markdown + YAML frontmatter)
+.claude/agents/  # 12 extended expert agents
+commands/        # 72 slash commands (Markdown with description frontmatter)
 hooks/           # Trigger-based automations (hooks.json)
-mcp-configs/     # 23 MCP server configurations
+mcp-configs/     # 24 MCP server configurations
 rules/           # Language-specific guidelines (common + 11 languages × 5 files)
-skills/          # 150+ knowledge collections (domain expertise)
+skills/          # 125 base + 10 extended knowledge collections
+.claude/skills/  # Extended skills (cloud, database, backend patterns)
 scripts/         # Cross-platform Node.js hook utilities
 tests/           # Test suite
 .claude/
-  settings.json  # Active hooks configuration (Windows paths)
+  settings.json  # Active hooks configuration
   PROJECT-CONTEXT.md  # Generated by /onboard (per-project)
 ```
 
@@ -286,8 +346,28 @@ description: Brief description of what this command does
 [Command instructions here]
 ```
 
+## Conventional Commits (MANDATORY)
+
+All commits MUST follow this format:
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+```
+
+**Types:** `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `ci`
+**Scopes:** `agents`, `commands`, `skills`, `hooks`, `rules`, `scripts`, `docs`
+
+**Examples:**
+- `feat(agents): add kubernetes-expert and terraform-expert agents`
+- `fix(commands): add missing frontmatter to build-fix command`
+- `docs: sync AGENTS.md counts with actual file count`
+
 ## Contributing
 
 File naming: `lowercase-with-hyphens.md`
-Commit style: `conventional` (feat:, fix:, docs:, test:)
+Commit style: `conventional` (see above)
 See `CONTRIBUTING.md` for full guidelines.
