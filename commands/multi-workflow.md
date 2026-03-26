@@ -1,3 +1,7 @@
+---
+description: Full multi-model collaborative development workflow with quality gates and intelligent routing
+---
+
 # Workflow - Multi-Model Collaborative Development
 
 Multi-model collaborative development workflow (Research → Ideation → Plan → Execute → Optimize → Review), with intelligent routing: Frontend → Gemini, Backend → Codex.

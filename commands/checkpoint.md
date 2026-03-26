@@ -1,3 +1,7 @@
+---
+description: Create or verify a checkpoint in your workflow for safe rollback
+---
+
 # Checkpoint Command
 
 Create or verify a checkpoint in your workflow.

@@ -1,3 +1,7 @@
+---
+description: Backend-focused multi-model collaborative development workflow
+---
+
 # Backend - Backend-Focused Development
 
 Backend-focused workflow (Research → Ideation → Plan → Execute → Optimize → Review), Codex-led.

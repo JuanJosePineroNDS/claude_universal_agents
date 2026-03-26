@@ -1,3 +1,7 @@
+---
+description: Manage eval-driven development workflow with baseline tracking
+---
+
 # Eval Command
 
 Manage eval-driven development workflow.
